@@ -69,7 +69,13 @@ copy_image() {
     new_image="${new_image_name}.dmg"
     echo "Creating a new disk image with the name '$new_image'..."
     # FAT32 only - because the course is fine wirh FAT32 - feel free to extend the script to support more formats
-    hdiutil create -size ${filesize}b -fs HFS+ -volname "New Image" -ov "$new_image"
+    # Extract from hdiutil manual:
+    #        hdiutil create -size
+    #        Specify the size of the image in the style of mkfile(8) with the addition of tera-,
+    #        peta-, and exa-bytes sizes (note that 'b' specifies a number of sectors, not bytes).
+    #        The larger sizes are useful for large sparse images.
+    number_of_sectors=$(echo "scale=0; $filesize / 512" | bc)
+    hdiutil create -size ${number_of_sectors}b -fs FAT32 -volname "ONE" "$new_image"
 
     # Check if the new image was created successfully
     if [ $? -ne 0 ]; then
