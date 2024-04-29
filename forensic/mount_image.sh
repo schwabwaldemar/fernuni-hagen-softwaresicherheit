@@ -75,7 +75,7 @@ copy_image() {
     #        peta-, and exa-bytes sizes (note that 'b' specifies a number of sectors, not bytes).
     #        The larger sizes are useful for large sparse images.
     number_of_sectors=$(echo "scale=0; $filesize / 512" | bc)
-    hdiutil create -size ${number_of_sectors}b -fs FAT32 -volname "ONE" "$new_image"
+    hdiutil create -size ${number_of_sectors}b -volname "$new_image" "$new_image"
 
     # Check if the new image was created successfully
     if [ $? -ne 0 ]; then
