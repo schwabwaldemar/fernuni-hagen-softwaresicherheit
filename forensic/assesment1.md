@@ -27,26 +27,13 @@ Ultimately, the outcomes of each process also reflect their differing objectives
 ## 2
 ### Please identify how and where the forensic principles by BSI, Casedy and Freiling differ. (15)
 
+I had difficulties finding resources on Casedy.
 
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  
-EMPTY  EMPTY  EMPTY  EMPTY  EMPTY  EMPTY  EMPTY  EMPTY  
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
-EMPTY
+Anyway, I got the point (I guess). The forensic principles by BSI are designed to be used in the practical world. Freiling is more theoretical and advocates a more scientific approach.
+
+It is hard to apply Freiling's principles in the real world. Freiling advocates for forensic processes that are reproducible and defensible and continious innovation, while BSI principles tend to focus more on compliance with established standards.
+
+Also, Freiling encourages a blend of computer science, law, and other relevant fields, recognizing the multifaceted nature of cyber incidents and the need for a broad understanding to interpret digital behaviors accurately. In practice, this method needs a lot of highly skilled professionals.
 
 ## 3
 ### For the following cases, argue why you prefer either a "clean" forensic process or incident response - and how you would mix and match to optimise your result:
