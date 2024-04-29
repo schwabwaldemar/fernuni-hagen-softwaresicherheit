@@ -151,3 +151,6 @@ Another way could be by saving the data encrypted and then discarding the encryp
 ## 6
 ### Looking at VeraCrypt's hidden volumes: Does a tool like tchunt actually find these? If not, what does it find - and if so, how? (20)
 
+Tools like tchunt are designed to search for traces of TrueCrypt and VeraCrypt volumes on a disk. While they may not directly detect hidden volumes themselves, they can identify potential indicators that encrypted volumes exist on the system.
+
+These tools typically search for patterns or signatures left behind by TrueCrypt or VeraCrypt containers, such as specific header structures or cryptographic signatures. When such signatures are found, it suggests the presence of encrypted volumes. However, these tools may not be able to differentiate between hidden volumes and regular volumes since they both share similar underlying structures.
