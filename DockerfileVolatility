@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:2.7-slim
+FROM python:2.7-slim AS base-image
 
 # Set the working directory to /app
 WORKDIR /app
@@ -30,6 +30,13 @@ RUN pip install 'openpyxl==2.6.4' 'ujson==1.35' 'pytz==2020.1' 'distorm3==3.4.4'
 
 # Clone the Volatility repository
 RUN git clone https://github.com/volatilityfoundation/volatility.git
+
+FROM ubuntu:latest AS build
+COPY --from=base-image /app /app
+RUN apt update
+RUN apt install build-essentials make
+WORKDIR /app/volatility/tools/linux
+RUN make
 
 # Set the working directory to the Volatility directory
 WORKDIR /app/volatility
