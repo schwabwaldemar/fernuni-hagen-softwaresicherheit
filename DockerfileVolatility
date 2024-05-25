@@ -1,0 +1,38 @@
+# Use an official Python runtime as a parent image
+FROM python:2.7-slim
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Install system packages
+RUN apt-get update && apt-get install -y \
+    git \
+    gcc \
+    libpcre3-dev \
+    python-dev \
+    libdistorm3-3 \
+    libdistorm3-dev \
+    libyara-dev \
+    libssl-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zlib1g-dev \
+    libpng-dev \
+    libraw1394-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip to the latest version for Python 2.7
+RUN pip install --upgrade pip
+
+# Install Python packages, adding error logging and handling Python 2.7 compatibility
+RUN pip install 'openpyxl==2.6.4' 'ujson==1.35' 'pytz==2020.1' 'distorm3==3.4.4' 'pycrypto==2.6.1' 'Pillow<7' || (echo 'Failed to install Python packages.' && exit 1)
+
+# Clone the Volatility repository
+RUN git clone https://github.com/volatilityfoundation/volatility.git
+
+# Set the working directory to the Volatility directory
+WORKDIR /app/volatility
+
+# No build or install commands necessary, just prepare environment
+CMD ["python", "vol.py"]
