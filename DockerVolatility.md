@@ -1,15 +1,25 @@
 Docker Images for execution of tools
 
-# Prerequisites
-You **need to Download** the images and from here: https://www.memoryanalysis.net/amf or from the course download of Fernuni-Hagen.
+## Prerequisites
+
+>>> DOWNLOAD THE IMAGES FIRST 
+> 
+> 
+You **need to Download** the images from one of the sources:
+- https://www.memoryanalysis.net/amf 
+- the course download of Fernuni-Hagen
+- [7z mirror](https://nextcloud.shwab.eu/s/j27Z73e8EXebsEb)
+
+Please take note for the licence information in the [Readme.md](Readme.md)
+
 Extract all files to the folder `Linux-Memory-Images`.
-Inside your downloaded zip file is a file called /linux/book.zip. While building the docker image 
+Inside your downloaded zip/7z file is a file called /linux/book.zip. While building the docker image 
 in the next step the file will be copied into your container automatically. But be sure it is available in the place `Linux-Memory-Images/linux/book.zip`.
-# Dockerfile-volatility
+## Dockerfile-volatility
 ``` shell
 docker build -t volatility -f DockerfileVolatility .
 ```
-Run with Images mounted:
+Run with Images mounted as volume:
 ``` shell
 docker run -it --rm -v ./Linux-Memory-Images/linux:/app/volatility/images  -v /usr/src:/usr/src -v /lib/modules:/lib/modules volatility  /bin/bash
 ```
@@ -40,7 +50,6 @@ python vol.py --profile=Linuxbookx64 -f images/linux-sample-1.bin linux_raw_list
 python vol.py --profile=Linuxbookx64 -f images/linux-sample-1.bin linux_ifconfig
 
 # Additional commands not from the course
-python vol.py --profile=Linuxbookx64 -f images/linux-sample-1.bin linux_proc_maps
 python vol.py --profile=Linuxbookx64 -f images/linux-sample-1.bin linux_psxview
 python vol.py --profile=Linuxbookx64 -f images/linux-sample-1.bin linux_lsmod
 ```
