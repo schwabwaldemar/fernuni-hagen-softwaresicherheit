@@ -31,22 +31,7 @@ RUN pip install 'openpyxl==2.6.4' 'ujson==1.35' 'pytz==2020.1' 'distorm3==3.4.4'
 # Clone the Volatility repository
 RUN git clone https://github.com/volatilityfoundation/volatility.git
 
-FROM ubuntu:latest AS build
-COPY --from=base-image /app /app
-RUN apt update
-RUN apt install -y vim
-RUN apt install -y build-essential
-RUN apt install -y make
-RUN apt install -y gcc
-RUN apt install -y libelf-dev
-RUN apt install -y dwarfdump
-
-
-WORKDIR /app/volatility/tools/linux
-RUN make
-RUN zip Linuxbookx64.zip module.dwarf /boot/System.map-$(uname -r)
-RUN cp Linuxbookx64.zip /app/volatility/volatility/plugins/overlays/linux/ \
-RUN make clean
+COPY Linux-Memory-Images/linux/book.zip /app/volatility/volatility/plugins/overlays/linux/book.zip
 
 # Set the working directory to the Volatility directory
 WORKDIR /app/volatility
